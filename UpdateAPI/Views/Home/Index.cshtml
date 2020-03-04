@@ -1,0 +1,91 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+    <script src="~/jquery/jquery-1.10.2.min.js"></script>
+    <script>
+        $(document).ready(function () {
+
+            $("#button2").click(function () {
+                var rollno = $("#txt1").val();
+                var sname = $("#txt2").val();
+                var fname = $("#txt3").val();
+                var mname = $("#txt4").val();
+                $.getJSON("/api/UpdateData?updaterollno=" + rollno + "&sname=" + sname + " &fname=" + fname + " &mname=" + mname, function (data) {
+                    $("#updateresult").text(data);
+                    $("#txt1").val("");
+                    $("#txt2").val("");
+                    $("#txt3").val("");
+                    $("#txt4").val("");
+                    $("#result").text("");
+                })
+            })
+            $("#button1").click(function () {
+                var rollno = $("#txt1").val();
+                var sname = $("#txt2").val();
+                var fname = $("#txt3").val();
+                var mname = $("#txt4").val();
+                $.getJSON("/api/UpdateData?rollno=" + rollno, function (data) {
+                    if (data == "Data not found") {
+                        $("#result").text("Roll no not found");
+                        $("#txt2").val("");
+                        $("#txt3").val("");
+                        $("#txt4").val("");
+                        $("#button2").prop("disabled", true);
+                        $("#updateresult").text("");
+                    }
+                    else {
+                        $("#result").text("Roll no found");
+                        var splitdata = data.split("||");
+                        $("#txt2").val(splitdata[0]);
+                        $("#txt3").val(splitdata[1]);
+                        $("#txt4").val(splitdata[2]);
+                        $("#button2").prop("disabled", false);
+                        $("#updateresult").text("");
+
+                    }
+                })
+            })
+           
+        })
+    </script>
+</head>
+<body>
+    <div> 
+        <table border="1" bgcolor="skyblue" width="450" height="300">
+            <tr>
+                <td>Roll no</td>
+                <td><input type="text" name="rollno" id="txt1" value="" /></td>
+                <td>
+                    <input type="button" name="search" id="button1" value="Search" />
+                    <span id="result" style="color:red"></span>
+                </td>
+            </tr>
+            <tr>
+                <td>Student name</td>
+                <td><input type="text" name="sname" id="txt2" value="" /></td>
+            </tr>
+            <tr>
+                <td>Father name</td>
+                <td><input type="text" name="fname" id="txt3" value="" /></td>
+            </tr>
+            <tr>
+                <td>Mother name</td>
+                <td><input type="text" name="mname" id="txt4" value="" /></td>
+            </tr>
+            <tr>
+                <td colspan="2"><input type="button" name="update" id="button2" value="update" disabled /> <span id="updateresult" style="color:red"></span></td>
+            </tr>
+           
+        </table>
+       
+    </div>
+</body>
+</html>
